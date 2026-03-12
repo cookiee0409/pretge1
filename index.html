@@ -724,15 +724,10 @@ async function loadData() {
     const data = await res.json();
     const all  = Array.isArray(data) ? data : (data.markets || []);
 
-    const filtered = all.filter(m => {
-      const text = (m.question || m.title || "").toLowerCase();
-      return TGE_KEYWORDS.some(kw => text.includes(kw)) && !isAlreadyLaunched(text);
-    });
-
-    if (filtered.length < 3) throw new Error("데이터 부족");
-
-    allGroups = groupByProject(filtered);
-    setLiveStatus(false);
+const filtered = all.filter(m => {
+  const text = (m.question || m.title || "").toLowerCase();
+  return !isAlreadyLaunched(text);
+});
 
   } catch (_) {
     allGroups = groupByProject(MOCK_MARKETS);
